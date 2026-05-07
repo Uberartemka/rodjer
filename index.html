@@ -830,34 +830,234 @@
         .footer-links a:hover { color: var(--gold); }
 
         /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-           RESPONSIVE
+           HAMBURGER BUTTON
+        ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+        .nav-burger {
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            gap: 5px;
+            width: 40px; height: 40px;
+            padding: 8px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            z-index: 201;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .nav-burger span {
+            display: block;
+            width: 22px; height: 1.5px;
+            background: var(--cream);
+            border-radius: 2px;
+            transform-origin: center;
+            transition: transform 0.3s, opacity 0.3s, width 0.3s;
+        }
+
+        /* X state */
+        .nav-burger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+        .nav-burger.open span:nth-child(2) { opacity: 0; width: 0; }
+        .nav-burger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+        /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+           MOBILE DRAWER
+        ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+        .nav-drawer {
+            position: fixed;
+            top: 0; right: 0;
+            width: min(320px, 85vw);
+            height: 100dvh;
+            background: var(--ink-2);
+            border-left: 1px solid var(--rule);
+            z-index: 300;
+            padding: 88px 36px 48px;
+            display: flex;
+            flex-direction: column;
+            transform: translateX(100%);
+            transition: transform 0.38s cubic-bezier(.4,0,.2,1);
+            overflow-y: auto;
+        }
+
+        .nav-drawer.open { transform: translateX(0); }
+
+        .drawer-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            flex: 1;
+        }
+
+        .drawer-link {
+            display: block;
+            padding: 16px 0;
+            font-family: var(--serif);
+            font-size: 1.6rem;
+            font-weight: 300;
+            color: var(--cream-dim);
+            text-decoration: none;
+            border-bottom: 1px solid rgba(184,145,90,0.1);
+            transition: color 0.2s, padding-left 0.2s;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .drawer-link:last-of-type { border-bottom: none; }
+        .drawer-link:active { color: var(--gold); padding-left: 8px; }
+
+        .drawer-cta {
+            display: block;
+            margin-top: 36px;
+            padding: 16px 24px;
+            background: var(--gold);
+            color: var(--ink);
+            text-align: center;
+            text-decoration: none;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            border-radius: 4px;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .drawer-cta:active { background: var(--gold-hi); }
+
+        .nav-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(6,8,11,0.7);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            z-index: 299;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.38s;
+        }
+
+        .nav-overlay.open { opacity: 1; pointer-events: all; }
+
+        /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+           TABLET  ≤ 1024px
         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
         @media (max-width: 1024px) {
-            .section-h { font-size: 2.6rem; }
-            .about-grid, .contact-grid { grid-template-columns: 1fr; gap: 56px; }
+            .section-h { font-size: 2.5rem; }
+            .about-grid  { grid-template-columns: 1fr; gap: 52px; }
+            .contact-grid { grid-template-columns: 1fr; gap: 52px; }
             .services-grid { grid-template-columns: 1fr; gap: 2px; }
-            .process-steps { grid-template-columns: 1fr 1fr; gap: 32px; }
-            .p-step { border-right: none; border-bottom: 1px solid var(--rule); padding: 28px 0; }
-            .p-step:last-child { border-bottom: none; }
+            .process-steps { grid-template-columns: 1fr 1fr; gap: 0; }
+            .p-step {
+                border-right: none;
+                border-bottom: 1px solid var(--rule);
+                padding: 28px 0;
+            }
+            .p-step:last-child  { border-bottom: none; }
+            .p-step:nth-child(odd)  { padding-right: 28px; }
+            .p-step:nth-child(even) { padding-left: 28px; border-left: 1px solid var(--rule); }
             .p-step:not(:first-child) { padding-left: 0; }
+            .p-step:nth-child(even) { padding-left: 28px; }
         }
 
+        /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+           MOBILE  ≤ 768px
+        ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
         @media (max-width: 768px) {
-            nav { padding: 16px 24px; }
+            /* Nav */
+            nav { padding: 14px 20px; }
+            nav.scrolled { padding: 12px 20px; }
             .nav-links { display: none; }
-            .section { padding: 80px 6%; }
-            .hero-content { padding: 0 5%; justify-content: center; }
-            .hero-glass { width: 100%; max-width: 460px; padding: 40px 32px; }
-            .hero-glass h1 { font-size: 2.4rem; }
-            footer { flex-direction: column; gap: 16px; }
+            .nav-cta   { display: none; }
+            .nav-burger { display: flex; }
+
+            /* Hero — panel centered, photo focused on face */
+            .hero {
+                min-height: 100dvh;
+                align-items: flex-end;
+                padding-bottom: 40px;
+            }
+            .hero-bg { background-position: 55% 10%; }
+            .hero-veil {
+                background: linear-gradient(
+                    to top,
+                    rgba(6,8,11,0.82) 0%,
+                    rgba(6,8,11,0.45) 45%,
+                    rgba(6,8,11,0.1)  100%
+                );
+            }
+            .hero-content {
+                padding: 0 20px;
+                justify-content: center;
+            }
+            .hero-glass {
+                width: 100%;
+                padding: 36px 28px 32px;
+                border-radius: 12px;
+            }
+            .hero-glass h1 { font-size: 2.6rem; }
+            .hero-eyebrow  { margin-bottom: 20px; }
+            .hero-desc     { margin-bottom: 24px; }
+            .hero-divider  { margin-bottom: 20px; }
+            .hero-stats    { gap: 24px; margin-bottom: 28px; }
+            .hero-stat-n   { font-size: 1.75rem; }
+            .scroll-hint   { display: none; }
+
+            /* Sections */
+            .section { padding: 64px 20px; }
+            .section-h { font-size: 2.2rem; }
+            .ruled { margin: 36px 0; }
+
+            /* About */
+            .about-grid { gap: 40px; }
+            .about-chips { gap: 7px; margin-top: 24px; }
+
+            /* Services */
+            .svc-card { padding: 40px 28px; }
+            .svc-num  { font-size: 6rem; }
+            .svc-card h3 { font-size: 1.65rem; }
+
+            /* Process — single column */
+            .process-steps { grid-template-columns: 1fr; }
+            .p-step {
+                display: grid;
+                grid-template-columns: 56px 1fr;
+                column-gap: 20px;
+                align-items: start;
+                border-right: none;
+                border-left: none;
+                border-bottom: 1px solid var(--rule);
+                padding: 24px 0;
+            }
+            .p-step:last-child { border-bottom: none; }
+            .p-step:nth-child(even) { padding-left: 0; border-left: none; }
+            .p-step-n {
+                font-size: 2.4rem;
+                margin-bottom: 0;
+                line-height: 1.1;
+            }
+            .p-step h4  { margin-bottom: 6px; }
+
+            /* Contact */
+            .contact-grid  { gap: 40px; }
+            .contact-note  { margin-bottom: 28px; }
+            .form-row      { grid-template-columns: 1fr; }
+            .form-field input,
+            .form-field textarea,
+            .form-field select { font-size: 1rem; padding: 14px 16px; } /* prevent iOS zoom */
+
+            /* Footer */
+            footer { flex-direction: column; gap: 16px; text-align: center; padding: 24px 20px; }
+            .footer-links { justify-content: center; }
         }
 
-        @media (max-width: 520px) {
-            .hero-glass h1 { font-size: 2rem; }
-            .hero-stats { gap: 20px; }
-            .form-row { grid-template-columns: 1fr; }
-            .svc-card { padding: 40px 28px; }
-            .section-h { font-size: 2.1rem; }
+        /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+           SMALL PHONES  ≤ 390px
+        ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+        @media (max-width: 390px) {
+            .hero-glass h1 { font-size: 2.2rem; }
+            .section-h     { font-size: 1.9rem; }
+            .hero-stats    { gap: 16px; }
+            .hero-stat-n   { font-size: 1.5rem; }
+            .svc-card      { padding: 32px 22px; }
+            .chip          { font-size: 0.68rem; padding: 5px 12px; }
         }
     </style>
 </head>
@@ -867,7 +1067,7 @@
      NAV
 ══════════════════════════════════════ -->
 <nav id="nav">
-    <a href="#home" class="nav-logo">ИФ</a>
+    <a href="#home" class="nav-logo">КЧ</a>
     <ul class="nav-links">
         <li><a href="#about">Обо мне</a></li>
         <li><a href="#services">Услуги</a></li>
@@ -875,7 +1075,22 @@
         <li><a href="#contact">Контакты</a></li>
     </ul>
     <a href="#contact" class="nav-cta">Записаться</a>
+    <button class="nav-burger" id="navBurger" aria-label="Меню" aria-expanded="false">
+        <span></span><span></span><span></span>
+    </button>
 </nav>
+
+<!-- Mobile drawer -->
+<div class="nav-drawer" id="navDrawer">
+    <nav class="drawer-nav">
+        <a href="#about"    class="drawer-link">Обо мне</a>
+        <a href="#services" class="drawer-link">Услуги</a>
+        <a href="#process"  class="drawer-link">Подход</a>
+        <a href="#contact"  class="drawer-link">Контакты</a>
+        <a href="#contact"  class="drawer-cta">Записаться на консультацию</a>
+    </nav>
+</div>
+<div class="nav-overlay" id="navOverlay"></div>
 
 <!-- ══════════════════════════════════════
      HERO
@@ -1215,6 +1430,42 @@
         });
     }, { threshold: 0.45 });
     sections.forEach(s => activeObserver.observe(s));
+
+    /* ── Mobile drawer ── */
+    const burger  = document.getElementById('navBurger');
+    const drawer  = document.getElementById('navDrawer');
+    const overlay = document.getElementById('navOverlay');
+
+    function openDrawer() {
+        burger.classList.add('open');
+        drawer.classList.add('open');
+        overlay.classList.add('open');
+        burger.setAttribute('aria-expanded', 'true');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeDrawer() {
+        burger.classList.remove('open');
+        drawer.classList.remove('open');
+        overlay.classList.remove('open');
+        burger.setAttribute('aria-expanded', 'false');
+        document.body.style.overflow = '';
+    }
+
+    burger.addEventListener('click', () =>
+        drawer.classList.contains('open') ? closeDrawer() : openDrawer()
+    );
+    overlay.addEventListener('click', closeDrawer);
+
+    /* Close drawer on any drawer link tap */
+    drawer.querySelectorAll('a').forEach(a =>
+        a.addEventListener('click', closeDrawer)
+    );
+
+    /* Close drawer on Escape */
+    document.addEventListener('keydown', e => {
+        if (e.key === 'Escape') closeDrawer();
+    });
 
     /* ── Form feedback ── */
     function handleSubmit(e) {
