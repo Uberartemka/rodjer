@@ -1,1486 +1,1239 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Кристина Черных — Бизнес-тренер</title>
-
-    <!-- Distinctive type pairing: Cormorant Garamond (display) + Jost (UI) -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
-
-    <style>
-        /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-           TOKENS
-        ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
-        :root {
-            --ink:       #06080b;
-            --ink-2:     #0d1118;
-            --ink-3:     #131a22;
-            --gold:      #b8915a;
-            --gold-hi:   #d4ab72;
-            --cream:     #ede6d8;
-            --cream-dim: #a09480;
-            --rule:      rgba(184, 145, 90, 0.22);
-            --glass-bg:  rgba(7, 9, 13, 0.56);
-            --r:         14px;
-            --serif:     'Cormorant Garamond', Georgia, serif;
-            --sans:      'Jost', system-ui, sans-serif;
-        }
-
-        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-        html { scroll-behavior: smooth; font-size: 16px; }
-
-        body {
-            font-family: var(--sans);
-            background: var(--ink);
-            color: var(--cream);
-            line-height: 1.6;
-            overflow-x: hidden;
-        }
-
-        /* Grain overlay for depth */
-        body::before {
-            content: '';
-            position: fixed;
-            inset: 0;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
-            opacity: 0.028;
-            pointer-events: none;
-            z-index: 9999;
-        }
-
-        /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-           SCROLL REVEAL
-        ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
-        .reveal {
-            opacity: 0;
-            transform: translateY(28px);
-            transition: opacity 0.75s cubic-bezier(.22,.68,0,1.2),
-                        transform 0.75s cubic-bezier(.22,.68,0,1.2);
-        }
-
-        .reveal.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .reveal-delay-1 { transition-delay: 0.1s; }
-        .reveal-delay-2 { transition-delay: 0.2s; }
-        .reveal-delay-3 { transition-delay: 0.32s; }
-        .reveal-delay-4 { transition-delay: 0.46s; }
-
-        /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-           NAV
-        ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
-        nav {
-            position: fixed;
-            top: 0; left: 0; right: 0;
-            z-index: 200;
-            padding: 20px 52px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            background: rgba(6, 8, 11, 0.78);
-            backdrop-filter: blur(18px);
-            -webkit-backdrop-filter: blur(18px);
-            border-bottom: 1px solid var(--rule);
-            transition: padding 0.3s;
-        }
-
-        nav.scrolled { padding: 14px 52px; }
-
-        .nav-logo {
-            font-family: var(--serif);
-            font-size: 1.15rem;
-            font-weight: 400;
-            letter-spacing: 0.08em;
-            color: var(--gold);
-            text-decoration: none;
-            text-transform: uppercase;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 40px;
-            list-style: none;
-        }
-
-        .nav-links a {
-            font-size: 0.78rem;
-            font-weight: 400;
-            letter-spacing: 0.12em;
-            text-transform: uppercase;
-            color: var(--cream-dim);
-            text-decoration: none;
-            transition: color 0.2s;
-            position: relative;
-        }
-
-        .nav-links a::after {
-            content: '';
-            position: absolute;
-            bottom: -3px; left: 0;
-            width: 0; height: 1px;
-            background: var(--gold);
-            transition: width 0.25s;
-        }
-
-        .nav-links a:hover { color: var(--cream); }
-        .nav-links a:hover::after { width: 100%; }
-
-        .nav-cta {
-            font-size: 0.72rem;
-            font-weight: 500;
-            letter-spacing: 0.14em;
-            text-transform: uppercase;
-            color: var(--gold);
-            border: 1px solid var(--gold);
-            border-radius: 3px;
-            padding: 9px 22px;
-            text-decoration: none;
-            transition: all 0.22s;
-        }
-
-        .nav-cta:hover {
-            background: var(--gold);
-            color: var(--ink);
-        }
-
-        /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-           HERO
-        ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
-        .hero {
-            position: relative;
-            height: 100vh;
-            min-height: 680px;
-            display: flex;
-            align-items: center;
-            overflow: hidden;
-        }
-
-        /* Blurred photo layer */
-        .hero-bg {
-            position: absolute;
-            inset: -24px;          /* compensate blur edge artifacts */
-            background-image: url('./frames/woman-designer-is-built-object-business-center_88135-44457.jpg');
-            background-size: cover;
-            background-position: 68% center;
-            filter: blur(10px);
-            z-index: 0;
-        }
-
-        /* Directional dark veil — left accepts the panel, right stays vivid */
-        .hero-veil {
-            position: absolute;
-            inset: 0;
-            z-index: 1;
-            background: linear-gradient(
-                105deg,
-                rgba(6,8,11,0.62) 0%,
-                rgba(6,8,11,0.32) 42%,
-                rgba(6,8,11,0.06) 72%,
-                rgba(6,8,11,0.04) 100%
-            );
-        }
-
-        .hero-content {
-            position: relative;
-            z-index: 2;
-            width: 100%;
-            max-width: 1320px;
-            margin: 0 auto;
-            padding: 0 7%;
-            display: flex;
-            justify-content: flex-start;
-            align-items: center;
-        }
-
-        /* ─── Frosted Glass Panel ─── */
-        .hero-glass {
-            width: 420px;
-            padding: 52px 48px 48px;
-            background: var(--glass-bg);
-            backdrop-filter: blur(30px) saturate(120%);
-            -webkit-backdrop-filter: blur(30px) saturate(120%);
-            border: 1px solid rgba(184, 145, 90, 0.28);
-            border-radius: var(--r);
-            box-shadow:
-                0 4px 48px rgba(0,0,0,0.5),
-                0 1px 0 rgba(255,255,255,0.04) inset;
-            /* staggered entrance */
-            animation: panelIn 1.1s cubic-bezier(.22,.68,0,1) both;
-            animation-delay: 0.3s;
-        }
-
-        @keyframes panelIn {
-            from { opacity: 0; transform: translateY(24px); }
-            to   { opacity: 1; transform: translateY(0); }
-        }
-
-        .hero-eyebrow {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 28px;
-        }
-
-        .hero-eyebrow-line {
-            display: block;
-            width: 28px;
-            height: 1px;
-            background: var(--gold);
-        }
-
-        .hero-eyebrow-text {
-            font-size: 0.68rem;
-            font-weight: 500;
-            letter-spacing: 0.18em;
-            text-transform: uppercase;
-            color: var(--gold);
-        }
-
-        .hero-glass h1 {
-            font-family: var(--serif);
-            font-size: 3rem;
-            font-weight: 300;
-            line-height: 1.1;
-            color: #fff;
-            margin-bottom: 4px;
-        }
-
-        .hero-glass h1 em {
-            font-style: italic;
-            color: var(--gold-hi);
-        }
-
-        .hero-position {
-            font-size: 0.8rem;
-            font-weight: 400;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-            color: var(--cream-dim);
-            margin-bottom: 24px;
-        }
-
-        .hero-desc {
-            font-size: 0.9rem;
-            font-weight: 300;
-            color: rgba(237, 230, 216, 0.75);
-            line-height: 1.8;
-            margin-bottom: 32px;
-        }
-
-        .hero-divider {
-            width: 100%;
-            height: 1px;
-            background: var(--rule);
-            margin-bottom: 28px;
-        }
-
-        .hero-stats {
-            display: flex;
-            gap: 32px;
-            margin-bottom: 36px;
-        }
-
-        .hero-stat {}
-
-        .hero-stat-n {
-            font-family: var(--serif);
-            font-size: 2rem;
-            font-weight: 300;
-            color: var(--gold-hi);
-            line-height: 1;
-            display: block;
-            margin-bottom: 3px;
-        }
-
-        .hero-stat-l {
-            font-size: 0.67rem;
-            font-weight: 400;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-            color: var(--cream-dim);
-        }
-
-        .hero-btn {
-            display: block;
-            width: 100%;
-            padding: 15px;
-            text-align: center;
-            background: var(--gold);
-            color: var(--ink);
-            border: none;
-            border-radius: 6px;
-            font-family: var(--sans);
-            font-size: 0.78rem;
-            font-weight: 600;
-            letter-spacing: 0.14em;
-            text-transform: uppercase;
-            text-decoration: none;
-            cursor: pointer;
-            transition: background 0.22s, transform 0.22s, box-shadow 0.22s;
-        }
-
-        .hero-btn:hover {
-            background: var(--gold-hi);
-            transform: translateY(-2px);
-            box-shadow: 0 12px 32px rgba(184,145,90,0.3);
-        }
-
-        /* Scroll indicator */
-        .scroll-hint {
-            position: absolute;
-            bottom: 40px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 2;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 8px;
-            animation: fadeUp 1s 1.8s both;
-        }
-
-        @keyframes fadeUp {
-            from { opacity: 0; transform: translateX(-50%) translateY(10px); }
-            to   { opacity: 1; transform: translateX(-50%) translateY(0); }
-        }
-
-        .scroll-hint span {
-            font-size: 0.6rem;
-            letter-spacing: 0.18em;
-            text-transform: uppercase;
-            color: var(--cream-dim);
-        }
-
-        .scroll-hint-line {
-            width: 1px;
-            height: 48px;
-            background: linear-gradient(to bottom, var(--gold), transparent);
-            animation: scrollPulse 2s ease-in-out infinite;
-        }
-
-        @keyframes scrollPulse {
-            0%, 100% { opacity: 0.4; }
-            50%       { opacity: 1; }
-        }
-
-        /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-           SHARED SECTION STYLES
-        ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
-        .section {
-            padding: 112px 7%;
-            max-width: 1320px;
-            margin: 0 auto;
-        }
-
-        .section-wrap {
-            background: var(--ink);
-        }
-
-        .section-wrap-alt {
-            background: var(--ink-2);
-        }
-
-        .eyebrow {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            margin-bottom: 20px;
-        }
-
-        .eyebrow-line {
-            display: block;
-            width: 36px;
-            height: 1px;
-            background: var(--gold);
-        }
-
-        .eyebrow-text {
-            font-size: 0.68rem;
-            font-weight: 500;
-            letter-spacing: 0.18em;
-            text-transform: uppercase;
-            color: var(--gold);
-        }
-
-        .section-h {
-            font-family: var(--serif);
-            font-size: 3.2rem;
-            font-weight: 300;
-            line-height: 1.15;
-            margin-bottom: 20px;
-            color: var(--cream);
-        }
-
-        .section-h em {
-            font-style: italic;
-            color: var(--gold-hi);
-        }
-
-        .section-p {
-            font-size: 0.92rem;
-            font-weight: 300;
-            color: var(--cream-dim);
-            max-width: 520px;
-            line-height: 1.82;
-        }
-
-        .ruled {
-            width: 100%;
-            height: 1px;
-            background: var(--rule);
-            margin: 56px 0;
-        }
-
-        /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-           ABOUT
-        ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
-        .about-grid {
-            display: grid;
-            grid-template-columns: 55fr 45fr;
-            gap: 96px;
-            align-items: start;
-        }
-
-        .about-text p {
-            font-size: 0.9rem;
-            font-weight: 300;
-            color: rgba(237,230,216,0.72);
-            line-height: 1.85;
-            margin-bottom: 18px;
-        }
-
-        .about-text p strong {
-            font-weight: 500;
-            color: var(--cream);
-        }
-
-        .about-chips {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-top: 32px;
-        }
-
-        .chip {
-            padding: 6px 16px;
-            font-size: 0.72rem;
-            font-weight: 400;
-            letter-spacing: 0.08em;
-            color: var(--gold);
-            border: 1px solid rgba(184,145,90,0.28);
-            border-radius: 2px;
-        }
-
-        .about-exp {
-            display: flex;
-            flex-direction: column;
-            gap: 0;
-        }
-
-        .exp-item {
-            padding: 28px 0 28px 24px;
-            border-left: 1px solid var(--rule);
-            position: relative;
-        }
-
-        .exp-item::before {
-            content: '';
-            position: absolute;
-            left: -4px; top: 36px;
-            width: 7px; height: 7px;
-            border-radius: 50%;
-            background: var(--gold);
-            border: 2px solid var(--ink-2);
-        }
-
-        .exp-item h4 {
-            font-family: var(--serif);
-            font-size: 1.15rem;
-            font-weight: 400;
-            color: var(--cream);
-            margin-bottom: 2px;
-        }
-
-        .exp-role {
-            font-size: 0.72rem;
-            font-weight: 500;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-            color: var(--gold);
-            margin-bottom: 10px;
-        }
-
-        .exp-item p {
-            font-size: 0.83rem;
-            font-weight: 300;
-            color: var(--cream-dim);
-            line-height: 1.7;
-        }
-
-        /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-           SERVICES
-        ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
-        .services-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 2px;
-            margin-top: 64px;
-        }
-
-        .svc-card {
-            padding: 56px 48px;
-            background: var(--ink-3);
-            border: 1px solid rgba(255,255,255,0.04);
-            position: relative;
-            overflow: hidden;
-            transition: border-color 0.3s;
-            cursor: default;
-        }
-
-        .svc-card:hover { border-color: rgba(184,145,90,0.18); }
-
-        /* Large decorative numeral */
-        .svc-num {
-            position: absolute;
-            top: -20px; right: 28px;
-            font-family: var(--serif);
-            font-size: 9rem;
-            font-weight: 300;
-            color: rgba(184,145,90,0.06);
-            line-height: 1;
-            pointer-events: none;
-            user-select: none;
-            transition: color 0.3s;
-        }
-
-        .svc-card:hover .svc-num { color: rgba(184,145,90,0.1); }
-
-        .svc-icon {
-            margin-bottom: 28px;
-        }
-
-        .svc-icon svg { width: 22px; height: 22px; }
-
-        .svc-card h3 {
-            font-family: var(--serif);
-            font-size: 1.9rem;
-            font-weight: 400;
-            line-height: 1.2;
-            color: var(--cream);
-            margin-bottom: 16px;
-        }
-
-        .svc-card > p {
-            font-size: 0.875rem;
-            font-weight: 300;
-            color: var(--cream-dim);
-            line-height: 1.8;
-            margin-bottom: 28px;
-        }
-
-        .svc-rule {
-            width: 32px;
-            height: 1px;
-            background: var(--gold);
-            margin-bottom: 24px;
-        }
-
-        .svc-list {
-            list-style: none;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            margin-bottom: 40px;
-        }
-
-        .svc-list li {
-            display: flex;
-            gap: 12px;
-            font-size: 0.83rem;
-            font-weight: 300;
-            color: var(--cream-dim);
-            align-items: flex-start;
-        }
-
-        .svc-list li::before {
-            content: '→';
-            color: var(--gold);
-            font-size: 0.75rem;
-            flex-shrink: 0;
-            margin-top: 2px;
-        }
-
-        .svc-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 0.72rem;
-            font-weight: 500;
-            letter-spacing: 0.14em;
-            text-transform: uppercase;
-            color: var(--gold);
-            text-decoration: none;
-            transition: gap 0.22s;
-        }
-
-        .svc-link:hover { gap: 18px; }
-
-        /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-           PROCESS
-        ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
-        .process-steps {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 0;
-            margin-top: 72px;
-        }
-
-        .p-step {
-            padding: 40px 36px 40px 0;
-            border-right: 1px solid var(--rule);
-            padding-right: 36px;
-        }
-
-        .p-step:last-child { border-right: none; padding-right: 0; }
-        .p-step:not(:first-child) { padding-left: 36px; }
-
-        .p-step-n {
-            font-family: var(--serif);
-            font-size: 4rem;
-            font-weight: 300;
-            color: rgba(184,145,90,0.18);
-            line-height: 1;
-            display: block;
-            margin-bottom: 16px;
-            transition: color 0.3s;
-        }
-
-        .p-step:hover .p-step-n { color: rgba(184,145,90,0.42); }
-
-        .p-step h4 {
-            font-family: var(--serif);
-            font-size: 1.25rem;
-            font-weight: 400;
-            color: var(--cream);
-            margin-bottom: 10px;
-        }
-
-        .p-step p {
-            font-size: 0.82rem;
-            font-weight: 300;
-            color: var(--cream-dim);
-            line-height: 1.72;
-        }
-
-        /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-           CONTACT
-        ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
-        .contact-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 96px;
-            align-items: start;
-        }
-
-        .contact-note {
-            font-size: 0.85rem;
-            font-weight: 300;
-            color: var(--cream-dim);
-            line-height: 1.8;
-            margin-bottom: 48px;
-            max-width: 380px;
-        }
-
-        .contact-items {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .c-item {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            font-size: 0.875rem;
-            font-weight: 300;
-            color: var(--cream-dim);
-        }
-
-        .c-item-icon {
-            width: 42px; height: 42px;
-            display: flex; align-items: center; justify-content: center;
-            border: 1px solid rgba(184,145,90,0.22);
-            border-radius: 4px;
-            flex-shrink: 0;
-        }
-
-        .c-item-icon svg { width: 17px; height: 17px; }
-
-        /* Form */
-        .contact-form {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-
-        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-
-        .form-field {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
-
-        .form-field label {
-            font-size: 0.68rem;
-            font-weight: 500;
-            letter-spacing: 0.12em;
-            text-transform: uppercase;
-            color: var(--cream-dim);
-        }
-
-        .form-field input,
-        .form-field textarea,
-        .form-field select {
-            padding: 13px 16px;
-            background: rgba(255,255,255,0.03);
-            border: 1px solid rgba(255,255,255,0.08);
-            border-radius: 4px;
-            color: var(--cream);
-            font-family: var(--sans);
-            font-size: 0.875rem;
-            font-weight: 300;
-            transition: border-color 0.22s;
-            outline: none;
-            -webkit-appearance: none;
-        }
-
-        .form-field input::placeholder,
-        .form-field textarea::placeholder { color: rgba(160,148,128,0.5); }
-
-        .form-field input:focus,
-        .form-field textarea:focus,
-        .form-field select:focus { border-color: rgba(184,145,90,0.55); }
-
-        .form-field textarea { resize: vertical; min-height: 108px; }
-
-        .form-field select option { background: var(--ink-3); }
-
-        .form-submit {
-            padding: 15px;
-            background: var(--gold);
-            color: var(--ink);
-            border: none;
-            border-radius: 4px;
-            font-family: var(--sans);
-            font-size: 0.75rem;
-            font-weight: 600;
-            letter-spacing: 0.14em;
-            text-transform: uppercase;
-            cursor: pointer;
-            transition: background 0.22s, transform 0.22s, box-shadow 0.22s;
-            margin-top: 4px;
-        }
-
-        .form-submit:hover {
-            background: var(--gold-hi);
-            transform: translateY(-2px);
-            box-shadow: 0 12px 28px rgba(184,145,90,0.26);
-        }
-
-        /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-           FOOTER
-        ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
-        footer {
-            padding: 28px 7%;
-            background: var(--ink);
-            border-top: 1px solid var(--rule);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .footer-copy {
-            font-size: 0.75rem;
-            font-weight: 300;
-            letter-spacing: 0.06em;
-            color: var(--cream-dim);
-        }
-
-        .footer-links {
-            display: flex;
-            gap: 28px;
-        }
-
-        .footer-links a {
-            font-size: 0.72rem;
-            font-weight: 400;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-            color: var(--cream-dim);
-            text-decoration: none;
-            transition: color 0.2s;
-        }
-
-        .footer-links a:hover { color: var(--gold); }
-
-        /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-           HAMBURGER BUTTON
-        ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
-        .nav-burger {
-            display: none;
-            flex-direction: column;
-            justify-content: center;
-            gap: 5px;
-            width: 40px; height: 40px;
-            padding: 8px;
-            background: none;
-            border: none;
-            cursor: pointer;
-            z-index: 201;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        .nav-burger span {
-            display: block;
-            width: 22px; height: 1.5px;
-            background: var(--cream);
-            border-radius: 2px;
-            transform-origin: center;
-            transition: transform 0.3s, opacity 0.3s, width 0.3s;
-        }
-
-        /* X state */
-        .nav-burger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
-        .nav-burger.open span:nth-child(2) { opacity: 0; width: 0; }
-        .nav-burger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
-
-        /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-           MOBILE DRAWER
-        ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
-        .nav-drawer {
-            position: fixed;
-            top: 0; right: 0;
-            width: min(320px, 85vw);
-            height: 100dvh;
-            background: var(--ink-2);
-            border-left: 1px solid var(--rule);
-            z-index: 300;
-            padding: 88px 36px 48px;
-            display: flex;
-            flex-direction: column;
-            transform: translateX(100%);
-            transition: transform 0.38s cubic-bezier(.4,0,.2,1);
-            overflow-y: auto;
-        }
-
-        .nav-drawer.open { transform: translateX(0); }
-
-        .drawer-nav {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-            flex: 1;
-        }
-
-        .drawer-link {
-            display: block;
-            padding: 16px 0;
-            font-family: var(--serif);
-            font-size: 1.6rem;
-            font-weight: 300;
-            color: var(--cream-dim);
-            text-decoration: none;
-            border-bottom: 1px solid rgba(184,145,90,0.1);
-            transition: color 0.2s, padding-left 0.2s;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        .drawer-link:last-of-type { border-bottom: none; }
-        .drawer-link:active { color: var(--gold); padding-left: 8px; }
-
-        .drawer-cta {
-            display: block;
-            margin-top: 36px;
-            padding: 16px 24px;
-            background: var(--gold);
-            color: var(--ink);
-            text-align: center;
-            text-decoration: none;
-            font-size: 0.75rem;
-            font-weight: 600;
-            letter-spacing: 0.14em;
-            text-transform: uppercase;
-            border-radius: 4px;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        .drawer-cta:active { background: var(--gold-hi); }
-
-        .nav-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(6,8,11,0.7);
-            backdrop-filter: blur(4px);
-            -webkit-backdrop-filter: blur(4px);
-            z-index: 299;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.38s;
-        }
-
-        .nav-overlay.open { opacity: 1; pointer-events: all; }
-
-        /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-           TABLET  ≤ 1024px
-        ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
-        @media (max-width: 1024px) {
-            .section-h { font-size: 2.5rem; }
-            .about-grid  { grid-template-columns: 1fr; gap: 52px; }
-            .contact-grid { grid-template-columns: 1fr; gap: 52px; }
-            .services-grid { grid-template-columns: 1fr; gap: 2px; }
-            .process-steps { grid-template-columns: 1fr 1fr; gap: 0; }
-            .p-step {
-                border-right: none;
-                border-bottom: 1px solid var(--rule);
-                padding: 28px 0;
-            }
-            .p-step:last-child  { border-bottom: none; }
-            .p-step:nth-child(odd)  { padding-right: 28px; }
-            .p-step:nth-child(even) { padding-left: 28px; border-left: 1px solid var(--rule); }
-            .p-step:not(:first-child) { padding-left: 0; }
-            .p-step:nth-child(even) { padding-left: 28px; }
-        }
-
-        /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-           MOBILE  ≤ 768px
-        ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
-        @media (max-width: 768px) {
-            /* Nav */
-            nav { padding: 14px 20px; }
-            nav.scrolled { padding: 12px 20px; }
-            .nav-links { display: none; }
-            .nav-cta   { display: none; }
-            .nav-burger { display: flex; }
-
-            /* Hero — panel centered, photo focused on face */
-            .hero {
-                min-height: 100dvh;
-                align-items: flex-end;
-                padding-bottom: 40px;
-            }
-            .hero-bg { background-position: 55% 10%; }
-            .hero-veil {
-                background: linear-gradient(
-                    to top,
-                    rgba(6,8,11,0.82) 0%,
-                    rgba(6,8,11,0.45) 45%,
-                    rgba(6,8,11,0.1)  100%
-                );
-            }
-            .hero-content {
-                padding: 0 20px;
-                justify-content: center;
-            }
-            .hero-glass {
-                width: 100%;
-                padding: 36px 28px 32px;
-                border-radius: 12px;
-            }
-            .hero-glass h1 { font-size: 2.6rem; }
-            .hero-eyebrow  { margin-bottom: 20px; }
-            .hero-desc     { margin-bottom: 24px; }
-            .hero-divider  { margin-bottom: 20px; }
-            .hero-stats    { gap: 24px; margin-bottom: 28px; }
-            .hero-stat-n   { font-size: 1.75rem; }
-            .scroll-hint   { display: none; }
-
-            /* Sections */
-            .section { padding: 64px 20px; }
-            .section-h { font-size: 2.2rem; }
-            .ruled { margin: 36px 0; }
-
-            /* About */
-            .about-grid { gap: 40px; }
-            .about-chips { gap: 7px; margin-top: 24px; }
-
-            /* Services */
-            .svc-card { padding: 40px 28px; }
-            .svc-num  { font-size: 6rem; }
-            .svc-card h3 { font-size: 1.65rem; }
-
-            /* Process — single column */
-            .process-steps { grid-template-columns: 1fr; }
-            .p-step {
-                display: grid;
-                grid-template-columns: 56px 1fr;
-                column-gap: 20px;
-                align-items: start;
-                border-right: none;
-                border-left: none;
-                border-bottom: 1px solid var(--rule);
-                padding: 24px 0;
-            }
-            .p-step:last-child { border-bottom: none; }
-            .p-step:nth-child(even) { padding-left: 0; border-left: none; }
-            .p-step-n {
-                font-size: 2.4rem;
-                margin-bottom: 0;
-                line-height: 1.1;
-            }
-            .p-step h4  { margin-bottom: 6px; }
-
-            /* Contact */
-            .contact-grid  { gap: 40px; }
-            .contact-note  { margin-bottom: 28px; }
-            .form-row      { grid-template-columns: 1fr; }
-            .form-field input,
-            .form-field textarea,
-            .form-field select { font-size: 1rem; padding: 14px 16px; } /* prevent iOS zoom */
-
-            /* Footer */
-            footer { flex-direction: column; gap: 16px; text-align: center; padding: 24px 20px; }
-            .footer-links { justify-content: center; }
-        }
-
-        /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-           SMALL PHONES  ≤ 390px
-        ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
-        @media (max-width: 390px) {
-            .hero-glass h1 { font-size: 2.2rem; }
-            .section-h     { font-size: 1.9rem; }
-            .hero-stats    { gap: 16px; }
-            .hero-stat-n   { font-size: 1.5rem; }
-            .svc-card      { padding: 32px 22px; }
-            .chip          { font-size: 0.68rem; padding: 5px 12px; }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Кристина Черных — Бизнес-тренер</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,700;1,9..144,300;1,9..144,400&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --sand:    #f5ede0;
+  --sand-2:  #ecddd0;
+  --terra:   #b85c38;
+  --terra-d: #8c3d22;
+  --clay:    #d4895f;
+  --ink:     #1c1612;
+  --ink-mid: #3d3129;
+  --muted:   #8a7a6e;
+  --rule:    rgba(28,22,18,0.12);
+  --serif:   'Fraunces', Georgia, serif;
+  --sans:    'DM Sans', system-ui, sans-serif;
+  --max:     1240px;
+}
+
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; font-size:16px; }
+
+body {
+  font-family: var(--sans);
+  background: var(--sand);
+  color: var(--ink);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+img { display:block; max-width:100%; }
+a { color: inherit; text-decoration:none; }
+
+/* ── REVEAL ── */
+.reveal {
+  opacity:0;
+  transform:translateY(20px);
+  transition: opacity .6s ease, transform .6s ease;
+}
+.reveal.vis { opacity:1; transform:translateY(0); }
+.reveal.d1 { transition-delay:.08s; }
+.reveal.d2 { transition-delay:.18s; }
+.reveal.d3 { transition-delay:.28s; }
+.reveal.d4 { transition-delay:.4s; }
+
+/* ── NAV ── */
+nav {
+  position: fixed;
+  top:0; left:0; right:0;
+  z-index:100;
+  padding: 18px 48px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  background: rgba(245,237,224,0.88);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--rule);
+  transition: padding .3s;
+}
+nav.sc { padding:12px 48px; }
+
+.nav-logo {
+  font-family: var(--serif);
+  font-size: 1.1rem;
+  font-weight: 400;
+  letter-spacing: .04em;
+  color: var(--ink);
+}
+.nav-logo span { color: var(--terra); }
+
+.nav-links { display:flex; gap:36px; list-style:none; }
+.nav-links a {
+  font-size:.78rem;
+  font-weight:400;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  color: var(--muted);
+  transition: color .2s;
+}
+.nav-links a:hover { color: var(--ink); }
+
+.nav-cta {
+  font-size:.75rem;
+  font-weight:500;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  background: var(--terra);
+  color: #fff;
+  padding: 9px 22px;
+  border-radius: 40px;
+  transition: background .2s;
+}
+.nav-cta:hover { background: var(--terra-d); }
+
+/* burger */
+.burger { display:none; flex-direction:column; gap:5px; cursor:pointer; background:none; border:none; padding:4px; }
+.burger span { display:block; width:22px; height:1.5px; background:var(--ink); transition:.3s; }
+.burger.open span:nth-child(1) { transform: rotate(45deg) translate(4.5px,4.5px); }
+.burger.open span:nth-child(2) { opacity:0; }
+.burger.open span:nth-child(3) { transform: rotate(-45deg) translate(4.5px,-4.5px); }
+
+.drawer {
+  display:none;
+  position:fixed;
+  inset:0;
+  top:0;
+  background: var(--sand);
+  z-index:90;
+  padding: 100px 48px 48px;
+  flex-direction:column;
+  gap:32px;
+}
+.drawer.open { display:flex; }
+.drawer a {
+  font-family: var(--serif);
+  font-size: 2rem;
+  font-weight:300;
+  color: var(--ink);
+  border-bottom: 1px solid var(--rule);
+  padding-bottom:16px;
+}
+
+/* ── HERO ── */
+.hero {
+  min-height: 100vh;
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  align-items:stretch;
+  padding-top: 72px;
+}
+
+.hero-left {
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  padding: 80px 64px 80px 7%;
+  background: var(--sand);
+}
+
+.hero-tag {
+  font-size:.72rem;
+  font-weight:500;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  color: var(--terra);
+  margin-bottom: 28px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+.hero-tag::before {
+  content:'';
+  display:block;
+  width:30px;
+  height:1.5px;
+  background: var(--terra);
+}
+
+.hero-h1 {
+  font-family: var(--serif);
+  font-size: clamp(3rem, 5vw, 5rem);
+  font-weight: 300;
+  line-height: 1.08;
+  letter-spacing:-.01em;
+  color: var(--ink);
+  margin-bottom: 32px;
+}
+.hero-h1 em {
+  font-style: italic;
+  color: var(--terra);
+}
+
+.hero-sub {
+  font-size: 1.05rem;
+  font-weight:300;
+  color: var(--ink-mid);
+  line-height: 1.7;
+  max-width: 440px;
+  margin-bottom: 48px;
+}
+
+.hero-actions { display:flex; align-items:center; gap:24px; flex-wrap:wrap; }
+
+.btn-primary {
+  background: var(--terra);
+  color:#fff;
+  padding:14px 32px;
+  border-radius:40px;
+  font-size:.85rem;
+  font-weight:500;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+  transition:background .2s;
+}
+.btn-primary:hover { background: var(--terra-d); }
+
+.btn-ghost {
+  font-size:.85rem;
+  font-weight:400;
+  color: var(--muted);
+  border-bottom: 1px solid var(--muted);
+  padding-bottom:2px;
+  transition: color .2s, border-color .2s;
+}
+.btn-ghost:hover { color:var(--ink); border-color:var(--ink); }
+
+.hero-stats {
+  display:flex;
+  gap:40px;
+  margin-top:56px;
+  padding-top:40px;
+  border-top: 1px solid var(--rule);
+}
+.hero-stat-n {
+  font-family: var(--serif);
+  font-size:2.2rem;
+  font-weight:300;
+  color: var(--ink);
+  line-height:1;
+}
+.hero-stat-l {
+  font-size:.72rem;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  color: var(--muted);
+  margin-top:6px;
+}
+
+.hero-right {
+  position:relative;
+  background: var(--sand-2);
+  overflow:hidden;
+}
+.hero-photo {
+  position:absolute;
+  inset:0;
+  background: url('./frames/woman-designer-is-built-object-business-center_88135-44457.jpg') center/cover no-repeat;
+}
+/* editorial texture strip */
+.hero-right::after {
+  content:'';
+  position:absolute;
+  left:0; top:0; bottom:0;
+  width:32px;
+  background: var(--sand);
+  clip-path: polygon(0 0, 100% 0, 65% 100%, 0 100%);
+  z-index:2;
+}
+
+.hero-badge {
+  position:absolute;
+  bottom:40px;
+  right:40px;
+  z-index:3;
+  background: var(--terra);
+  color:#fff;
+  width:130px;
+  height:130px;
+  border-radius:50%;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:16px;
+  animation: spin 20s linear infinite;
+}
+.hero-badge-inner { animation: spin-r 20s linear infinite; text-align:center; }
+.hero-badge-n {
+  font-family:var(--serif);
+  font-size:2rem;
+  font-weight:300;
+  line-height:1;
+  display:block;
+}
+.hero-badge-l {
+  font-size:.6rem;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  opacity:.9;
+  display:block;
+  margin-top:4px;
+}
+@keyframes spin { from{transform:rotate(0)} to{transform:rotate(360deg)} }
+@keyframes spin-r { from{transform:rotate(0)} to{transform:rotate(-360deg)} }
+
+/* ── MARQUEE ── */
+.marquee-wrap {
+  background: var(--terra);
+  overflow:hidden;
+  padding: 14px 0;
+}
+.marquee-inner {
+  display:flex;
+  gap:0;
+  white-space:nowrap;
+  animation: marquee 28s linear infinite;
+}
+.marquee-inner span {
+  font-size:.7rem;
+  font-weight:500;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  color:#fff;
+  padding:0 24px;
+  opacity:.85;
+}
+.marquee-inner .dot {
+  color:#fff;
+  opacity:.4;
+  padding:0;
+}
+@keyframes marquee {
+  from { transform:translateX(0); }
+  to   { transform:translateX(-50%); }
+}
+
+/* ── SECTION BASE ── */
+section {
+  padding: 100px 7%;
+  max-width: var(--max);
+  margin: 0 auto;
+}
+.full-bleed { max-width:none; padding-left:0; padding-right:0; }
+.full-bleed > .inner { max-width:var(--max); margin:0 auto; padding:0 7%; }
+
+.eyebrow {
+  font-size:.7rem;
+  font-weight:500;
+  letter-spacing:.2em;
+  text-transform:uppercase;
+  color: var(--terra);
+  margin-bottom:20px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+.eyebrow::before {
+  content:'';
+  width:24px;
+  height:1.5px;
+  background:var(--terra);
+  flex-shrink:0;
+}
+
+.section-h {
+  font-family: var(--serif);
+  font-size: clamp(2rem,4vw,3.6rem);
+  font-weight:300;
+  line-height:1.1;
+  letter-spacing:-.01em;
+  margin-bottom:24px;
+}
+.section-h em { font-style:italic; color:var(--terra); }
+
+/* ── ABOUT ── */
+.about-grid {
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap:80px;
+  align-items:center;
+}
+.about-img-wrap {
+  position:relative;
+}
+.about-img {
+  width:100%;
+  aspect-ratio:4/5;
+  background: var(--sand-2) url('./frames/woman-designer-is-built-object-business-center_88135-44457.jpg') center/cover no-repeat;
+  border-radius:4px;
+}
+.about-img-tag {
+  position:absolute;
+  bottom:-24px;
+  right:-24px;
+  background: var(--ink);
+  color:#fff;
+  padding:20px 28px;
+  border-radius:4px;
+  font-family:var(--serif);
+  font-size:1.1rem;
+  font-weight:300;
+  font-style:italic;
+  max-width:220px;
+  line-height:1.5;
+}
+
+.about-text p {
+  color: var(--ink-mid);
+  font-size:1rem;
+  line-height:1.8;
+  margin-bottom:20px;
+}
+
+.about-values {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:1px;
+  background: var(--rule);
+  border: 1px solid var(--rule);
+  margin-top:40px;
+}
+.av-item {
+  background: var(--sand);
+  padding:20px 22px;
+}
+.av-item-n {
+  font-family:var(--serif);
+  font-size:1.8rem;
+  font-weight:300;
+  color:var(--terra);
+  line-height:1;
+  margin-bottom:6px;
+}
+.av-item-l {
+  font-size:.78rem;
+  letter-spacing:.06em;
+  color: var(--muted);
+}
+
+/* ── BLOG PREVIEW ── */
+.blog-section { background: var(--sand-2); }
+.blog-section > .inner { padding-top:100px; padding-bottom:100px; }
+
+.blog-head {
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  margin-bottom:56px;
+}
+.blog-head .section-h { margin-bottom:0; }
+
+.blog-grid {
+  display:grid;
+  grid-template-columns: 1.4fr 1fr 1fr;
+  gap:2px;
+  background: var(--rule);
+}
+
+.blog-card {
+  background: var(--sand);
+  padding:32px 28px;
+  display:flex;
+  flex-direction:column;
+  transition: background .2s;
+}
+.blog-card:hover { background:#fff; }
+
+.blog-card.featured { grid-row:span 2; background:var(--ink); color:#fff; }
+.blog-card.featured:hover { background: var(--ink-mid); }
+
+.blog-cat {
+  font-size:.65rem;
+  font-weight:500;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  color: var(--terra);
+  margin-bottom:16px;
+}
+.blog-card.featured .blog-cat { color: var(--clay); }
+
+.blog-card-h {
+  font-family: var(--serif);
+  font-size:1.35rem;
+  font-weight:300;
+  line-height:1.3;
+  margin-bottom:auto;
+  padding-bottom:24px;
+}
+.blog-card.featured .blog-card-h { font-size:1.75rem; }
+
+.blog-meta {
+  font-size:.72rem;
+  color: var(--muted);
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding-top:20px;
+  border-top:1px solid var(--rule);
+}
+.blog-card.featured .blog-meta { border-top-color:rgba(255,255,255,.15); color:rgba(255,255,255,.45); }
+
+.blog-arrow {
+  width:32px;
+  height:32px;
+  border-radius:50%;
+  border:1px solid var(--rule);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  transition:background .2s, border-color .2s;
+}
+.blog-card:hover .blog-arrow { background:var(--terra); border-color:var(--terra); }
+.blog-card:hover .blog-arrow svg { stroke:#fff; }
+.blog-card.featured .blog-arrow { border-color:rgba(255,255,255,.2); }
+.blog-card.featured:hover .blog-arrow { background:var(--terra); border-color:var(--terra); }
+
+/* ── SERVICES ── */
+.services-grid {
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:2px;
+  background:var(--rule);
+  margin-top:56px;
+}
+.svc-card {
+  background: var(--sand);
+  padding:36px 28px;
+  display:flex;
+  flex-direction:column;
+  gap:16px;
+  transition:background .2s;
+}
+.svc-card:hover { background:#fff; }
+.svc-n {
+  font-family:var(--serif);
+  font-size:3rem;
+  font-weight:300;
+  color:var(--sand-2);
+  line-height:1;
+  margin-bottom:4px;
+}
+.svc-card:hover .svc-n { color:var(--terra); }
+.svc-h {
+  font-family:var(--serif);
+  font-size:1.2rem;
+  font-weight:400;
+  line-height:1.3;
+}
+.svc-p {
+  font-size:.88rem;
+  color:var(--muted);
+  line-height:1.7;
+  flex:1;
+}
+.svc-link {
+  font-size:.72rem;
+  font-weight:500;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  color:var(--terra);
+  display:flex;
+  align-items:center;
+  gap:6px;
+  margin-top:8px;
+}
+.svc-link svg { transition:transform .2s; }
+.svc-card:hover .svc-link svg { transform:translateX(4px); }
+
+/* ── PROCESS ── */
+.process-section { background: var(--ink); color:#fff; }
+.process-section > .inner { padding-top:100px; padding-bottom:100px; }
+.process-section .section-h { color:#fff; }
+.process-section .eyebrow { color:var(--clay); }
+.process-section .eyebrow::before { background:var(--clay); }
+
+.process-steps {
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:0;
+  margin-top:60px;
+  border:1px solid rgba(255,255,255,.08);
+}
+.p-step {
+  padding:40px 28px;
+  border-right:1px solid rgba(255,255,255,.08);
+  position:relative;
+  transition:background .25s;
+}
+.p-step:last-child { border-right:none; }
+.p-step:hover { background:rgba(255,255,255,.04); }
+.p-step-n {
+  font-family:var(--serif);
+  font-size:3.5rem;
+  font-weight:300;
+  color:rgba(255,255,255,.08);
+  line-height:1;
+  display:block;
+  margin-bottom:24px;
+}
+.p-step h4 {
+  font-family:var(--serif);
+  font-size:1.1rem;
+  font-weight:400;
+  color:#fff;
+  margin-bottom:12px;
+}
+.p-step p {
+  font-size:.85rem;
+  color:rgba(255,255,255,.5);
+  line-height:1.7;
+}
+
+/* ── TESTIMONIALS ── */
+.testi-section {}
+.testi-grid {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:2px;
+  background:var(--rule);
+  margin-top:56px;
+}
+.testi-card {
+  background:var(--sand);
+  padding:36px 32px;
+  transition:background .2s;
+}
+.testi-card:hover { background:#fff; }
+.testi-quote {
+  font-family:var(--serif);
+  font-size:1.15rem;
+  font-weight:300;
+  font-style:italic;
+  line-height:1.65;
+  color:var(--ink);
+  margin-bottom:24px;
+}
+.testi-author {
+  display:flex;
+  align-items:center;
+  gap:14px;
+  padding-top:20px;
+  border-top:1px solid var(--rule);
+}
+.testi-av {
+  width:40px;
+  height:40px;
+  border-radius:50%;
+  background:var(--sand-2);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-family:var(--serif);
+  font-size:.95rem;
+  font-weight:400;
+  color:var(--terra);
+  flex-shrink:0;
+}
+.testi-name {
+  font-size:.88rem;
+  font-weight:500;
+  color:var(--ink);
+}
+.testi-role {
+  font-size:.75rem;
+  color:var(--muted);
+  margin-top:2px;
+}
+
+/* ── CONTACT ── */
+.contact-grid {
+  display:grid;
+  grid-template-columns:1fr 1.1fr;
+  gap:80px;
+  align-items:start;
+}
+
+.contact-intro p {
+  font-size:1rem;
+  color:var(--ink-mid);
+  line-height:1.8;
+  margin-bottom:36px;
+}
+
+.c-items { display:flex; flex-direction:column; gap:16px; }
+.c-item {
+  display:flex;
+  align-items:center;
+  gap:14px;
+  padding:16px 20px;
+  background:var(--sand-2);
+  border-radius:4px;
+  font-size:.9rem;
+  color:var(--ink-mid);
+}
+.c-item-icon {
+  width:36px; height:36px;
+  background:var(--terra);
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-shrink:0;
+}
+.c-item-icon svg { width:16px; height:16px; stroke:#fff; }
+
+.contact-form {
+  background:#fff;
+  padding:40px 36px;
+  border-radius:4px;
+}
+.form-field { margin-bottom:20px; }
+.form-field label {
+  display:block;
+  font-size:.72rem;
+  font-weight:500;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  color:var(--muted);
+  margin-bottom:8px;
+}
+.form-field input,
+.form-field select,
+.form-field textarea {
+  width:100%;
+  padding:12px 16px;
+  background:var(--sand);
+  border:1.5px solid transparent;
+  border-radius:4px;
+  font-family:var(--sans);
+  font-size:.9rem;
+  color:var(--ink);
+  outline:none;
+  transition:border-color .2s;
+}
+.form-field input:focus,
+.form-field select:focus,
+.form-field textarea:focus { border-color:var(--terra); }
+.form-field textarea { min-height:100px; resize:vertical; }
+.form-row { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+
+.form-submit {
+  width:100%;
+  padding:14px;
+  background:var(--terra);
+  color:#fff;
+  border:none;
+  border-radius:40px;
+  font-family:var(--sans);
+  font-size:.85rem;
+  font-weight:500;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  cursor:pointer;
+  transition:background .2s;
+  margin-top:8px;
+}
+.form-submit:hover { background:var(--terra-d); }
+
+/* ── FOOTER ── */
+footer {
+  background:var(--ink);
+  color:rgba(255,255,255,.45);
+  padding:40px 7%;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  font-size:.78rem;
+  letter-spacing:.06em;
+}
+.footer-logo {
+  font-family:var(--serif);
+  font-size:1.1rem;
+  font-weight:300;
+  color:rgba(255,255,255,.7);
+}
+.footer-links { display:flex; gap:28px; }
+.footer-links a { transition:color .2s; }
+.footer-links a:hover { color:#fff; }
+
+/* ── RESPONSIVE ── */
+@media (max-width:1024px) {
+  .hero { grid-template-columns:1fr; min-height:auto; }
+  .hero-right { min-height:50vw; }
+  .hero-right::after { display:none; }
+  .hero-left { padding:60px 7%; }
+  .about-grid { grid-template-columns:1fr; }
+  .about-img-tag { display:none; }
+  .blog-grid { grid-template-columns:1fr; }
+  .blog-card.featured { grid-row:auto; }
+  .services-grid { grid-template-columns:1fr 1fr; }
+  .process-steps { grid-template-columns:1fr 1fr; }
+  .process-steps .p-step:nth-child(2) { border-right:none; }
+  .testi-grid { grid-template-columns:1fr; }
+  .contact-grid { grid-template-columns:1fr; }
+}
+
+@media (max-width:768px) {
+  nav { padding:16px 24px; }
+  nav.sc { padding:12px 24px; }
+  .nav-links { display:none; }
+  .nav-cta { display:none; }
+  .burger { display:flex; }
+  section { padding:72px 5%; }
+  .hero-left { padding:48px 5%; }
+  .hero-stats { flex-wrap:wrap; gap:24px; }
+  .blog-head { flex-direction:column; align-items:flex-start; gap:16px; }
+  .services-grid { grid-template-columns:1fr; }
+  .process-steps { grid-template-columns:1fr; }
+  .process-steps .p-step { border-right:none; border-bottom:1px solid rgba(255,255,255,.08); }
+  .form-row { grid-template-columns:1fr; }
+  footer { flex-direction:column; gap:20px; text-align:center; }
+}
+</style>
 </head>
 <body>
 
-<!-- ══════════════════════════════════════
-     NAV
-══════════════════════════════════════ -->
+<!-- NAV -->
 <nav id="nav">
-    <a href="#home" class="nav-logo">КЧ</a>
-    <ul class="nav-links">
-        <li><a href="#about">Обо мне</a></li>
-        <li><a href="#services">Услуги</a></li>
-        <li><a href="#process">Подход</a></li>
-        <li><a href="#contact">Контакты</a></li>
-    </ul>
-    <a href="#contact" class="nav-cta">Записаться</a>
-    <button class="nav-burger" id="navBurger" aria-label="Меню" aria-expanded="false">
-        <span></span><span></span><span></span>
-    </button>
+  <a href="#" class="nav-logo">Кристина <span>Черных</span></a>
+  <ul class="nav-links">
+    <li><a href="#about">Обо мне</a></li>
+    <li><a href="#blog">Блог</a></li>
+    <li><a href="#services">Услуги</a></li>
+    <li><a href="#contact">Контакты</a></li>
+  </ul>
+  <a href="#contact" class="nav-cta">Записаться</a>
+  <button class="burger" id="burger" aria-label="Меню">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
 
-<!-- Mobile drawer -->
-<div class="nav-drawer" id="navDrawer">
-    <nav class="drawer-nav">
-        <a href="#about"    class="drawer-link">Обо мне</a>
-        <a href="#services" class="drawer-link">Услуги</a>
-        <a href="#process"  class="drawer-link">Подход</a>
-        <a href="#contact"  class="drawer-link">Контакты</a>
-        <a href="#contact"  class="drawer-cta">Записаться на консультацию</a>
-    </nav>
+<!-- DRAWER -->
+<div class="drawer" id="drawer">
+  <a href="#about" class="drawer-link">Обо мне</a>
+  <a href="#blog" class="drawer-link">Блог</a>
+  <a href="#services" class="drawer-link">Услуги</a>
+  <a href="#contact" class="drawer-link">Контакты</a>
 </div>
-<div class="nav-overlay" id="navOverlay"></div>
 
-<!-- ══════════════════════════════════════
-     HERO
-══════════════════════════════════════ -->
-<section class="hero" id="home">
-    <div class="hero-bg"></div>
-    <div class="hero-veil"></div>
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-left">
+    <div class="hero-tag reveal">Бизнес-тренер · Консультант</div>
+    <h1 class="hero-h1 reveal d1">
+      Бизнес — это<br>про людей,<br><em>а не про схемы</em>
+    </h1>
+    <p class="hero-sub reveal d2">
+      Помогаю руководителям и командам расти — через честный разговор,
+      практику и инструменты, которые реально работают.
+    </p>
+    <div class="hero-actions reveal d3">
+      <a href="#contact" class="btn-primary">Начать работу</a>
+      <a href="#blog" class="btn-ghost">Читать блог</a>
+    </div>
+    <div class="hero-stats reveal d4">
+      <div>
+        <div class="hero-stat-n">12+</div>
+        <div class="hero-stat-l">лет в теме</div>
+      </div>
+      <div>
+        <div class="hero-stat-n">340</div>
+        <div class="hero-stat-l">клиентов</div>
+      </div>
+      <div>
+        <div class="hero-stat-n">60+</div>
+        <div class="hero-stat-l">компаний</div>
+      </div>
+    </div>
+  </div>
 
-    <div class="hero-content">
-        <div class="hero-glass">
+  <div class="hero-right">
+    <div class="hero-photo"></div>
+    <div class="hero-badge" aria-hidden="true">
+      <div class="hero-badge-inner">
+        <span class="hero-badge-n">↓</span>
+        <span class="hero-badge-l">Читать дальше</span>
+      </div>
+    </div>
+  </div>
+</div>
 
-            <div class="hero-eyebrow">
-                <span class="hero-eyebrow-line"></span>
-                <span class="hero-eyebrow-text">Бизнес-тренер &middot; B2B</span>
-            </div>
+<!-- MARQUEE -->
+<div class="marquee-wrap" aria-hidden="true">
+  <div class="marquee-inner" id="mq">
+    <span>Управление командой</span><span class="dot">·</span>
+    <span>Личный рост</span><span class="dot">·</span>
+    <span>Стратегия</span><span class="dot">·</span>
+    <span>Лидерство</span><span class="dot">·</span>
+    <span>Переговоры</span><span class="dot">·</span>
+    <span>Корпоративный тренинг</span><span class="dot">·</span>
+    <span>Коучинг</span><span class="dot">·</span>
+    <span>Управление командой</span><span class="dot">·</span>
+    <span>Личный рост</span><span class="dot">·</span>
+    <span>Стратегия</span><span class="dot">·</span>
+    <span>Лидерство</span><span class="dot">·</span>
+    <span>Переговоры</span><span class="dot">·</span>
+    <span>Корпоративный тренинг</span><span class="dot">·</span>
+    <span>Коучинг</span><span class="dot">·</span>
+  </div>
+</div>
 
-            <h1>Кристина<br><em>Черных</em></h1>
-            <p class="hero-position">Развитие продаж &amp; Бизнес-процессы</p>
-
-            <p class="hero-desc">
-                Помогаю малому и среднему бизнесу выстраивать работающие процессы,
-                масштабировать продажи и развивать сильные команды.
-            </p>
-
-            <div class="hero-divider"></div>
-
-            <div class="hero-stats">
-                <div class="hero-stat">
-                    <span class="hero-stat-n">7+</span>
-                    <span class="hero-stat-l">Лет опыта</span>
-                </div>
-                <div class="hero-stat">
-                    <span class="hero-stat-n">50+</span>
-                    <span class="hero-stat-l">Компаний</span>
-                </div>
-                <div class="hero-stat">
-                    <span class="hero-stat-n">B2B</span>
-                    <span class="hero-stat-l">Специализация</span>
-                </div>
-            </div>
-
-            <a href="#contact" class="hero-btn">Записаться на консультацию</a>
-
+<!-- ABOUT -->
+<section id="about">
+  <div class="about-grid">
+    <div class="about-img-wrap reveal">
+      <div class="about-img"></div>
+      <div class="about-img-tag">"Меняться — это не слабость,<br>это навык"</div>
+    </div>
+    <div class="about-text">
+      <div class="eyebrow reveal">Обо мне</div>
+      <h2 class="section-h reveal d1">Практик, который <em>говорит прямо</em></h2>
+      <p class="reveal d2">
+        12 лет назад я сама была руководителем с горящей командой и ощущением, что что-то идёт не так.
+        Тогда я начала разбираться — и не останавливаюсь.
+      </p>
+      <p class="reveal d2">
+        Сегодня я работаю с людьми, которые хотят реальных изменений: в себе, в команде, в бизнесе.
+        Без пустых мотивашек и шаблонных упражнений.
+      </p>
+      <div class="about-values reveal d3">
+        <div class="av-item">
+          <div class="av-item-n">340</div>
+          <div class="av-item-l">Клиентов</div>
         </div>
+        <div class="av-item">
+          <div class="av-item-n">60+</div>
+          <div class="av-item-l">Компаний</div>
+        </div>
+        <div class="av-item">
+          <div class="av-item-n">12</div>
+          <div class="av-item-l">Лет опыта</div>
+        </div>
+        <div class="av-item">
+          <div class="av-item-n">8</div>
+          <div class="av-item-l">Направлений</div>
+        </div>
+      </div>
     </div>
-
-    <div class="scroll-hint">
-        <span>Scroll</span>
-        <div class="scroll-hint-line"></div>
-    </div>
+  </div>
 </section>
 
-<!-- ══════════════════════════════════════
-     ABOUT
-══════════════════════════════════════ -->
-<div class="section-wrap-alt" id="about">
-<div class="section">
-    <div class="about-grid">
-
-        <div class="about-text">
-            <div class="eyebrow reveal">
-                <span class="eyebrow-line"></span>
-                <span class="eyebrow-text">Обо мне</span>
-            </div>
-            <h2 class="section-h reveal reveal-delay-1">
-                Практик из<br><em>крупного бизнеса</em>
-            </h2>
-
-            <div class="ruled reveal reveal-delay-2"></div>
-
-            <p class="reveal reveal-delay-2">
-                Более 7 лет в сфере B2B-продаж и развития бизнеса.
-                Работала <strong>макроменеджером по развитию продаж в Tele2</strong>&nbsp;—
-                выстраивала процессы, управляла командами и масштабировала показатели
-                на уровне макрорегиона.
-            </p>
-            <p class="reveal reveal-delay-3">
-                Сегодня применяю этот опыт, чтобы помогать малому и среднему бизнесу:
-                строить понятные процессы, устранять узкие места и создавать системы,
-                которые работают без постоянного ручного управления.
-            </p>
-            <p class="reveal reveal-delay-3">
-                Мой подход — без лишней теории. Только конкретные инструменты
-                и решения, проверенные на практике в реальных компаниях.
-            </p>
-
-            <div class="about-chips reveal reveal-delay-4">
-                <span class="chip">B2B-продажи</span>
-                <span class="chip">Бизнес-процессы</span>
-                <span class="chip">Развитие команд</span>
-                <span class="chip">Tele2</span>
-                <span class="chip">Корпоративные тренинги</span>
-                <span class="chip">МСБ</span>
-            </div>
-        </div>
-
-        <div class="about-exp reveal reveal-delay-2">
-            <div class="exp-item">
-                <h4>Tele2</h4>
-                <div class="exp-role">Макроменеджер по развитию продаж</div>
-                <p>Управление продажами на уровне макрорегиона, разработка стратегий роста, развитие дилерской сети, обучение команд.</p>
-            </div>
-            <div class="exp-item">
-                <h4>Корпоративные тренинги</h4>
-                <div class="exp-role">Бизнес-тренер</div>
-                <p>Разработка и проведение обучающих программ для B2B-команд: продажи, переговоры, бизнес-процессы, клиентский сервис.</p>
-            </div>
-            <div class="exp-item">
-                <h4>Личные консультации</h4>
-                <div class="exp-role">Бизнес-консультант</div>
-                <p>Индивидуальная работа с собственниками и руководителями МСБ: стратегия, процессы, масштабирование продаж.</p>
-            </div>
-        </div>
-
+<!-- BLOG -->
+<div class="blog-section full-bleed" id="blog">
+<div class="inner">
+  <div class="blog-head">
+    <div>
+      <div class="eyebrow reveal">Блог</div>
+      <h2 class="section-h reveal d1">Думаю вслух — <em>пишу честно</em></h2>
     </div>
+    <a href="#" class="btn-ghost reveal">Все статьи →</a>
+  </div>
+
+  <div class="blog-grid">
+    <a href="#" class="blog-card featured reveal">
+      <div class="blog-cat">Лидерство</div>
+      <h3 class="blog-card-h">
+        Почему хорошие руководители иногда делают команду хуже — и как это остановить
+      </h3>
+      <div class="blog-meta">
+        <span>14 апреля 2025</span>
+        <div class="blog-arrow">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </div>
+      </div>
+    </a>
+    <a href="#" class="blog-card reveal d1">
+      <div class="blog-cat">Переговоры</div>
+      <h3 class="blog-card-h">Три фразы, которые разрушают доверие быстрее, чем вы думаете</h3>
+      <div class="blog-meta">
+        <span>2 апреля 2025</span>
+        <div class="blog-arrow">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </div>
+      </div>
+    </a>
+    <a href="#" class="blog-card reveal d2">
+      <div class="blog-cat">Стратегия</div>
+      <h3 class="blog-card-h">Когда «сделаем план» — это способ ничего не делать</h3>
+      <div class="blog-meta">
+        <span>25 марта 2025</span>
+        <div class="blog-arrow">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </div>
+      </div>
+    </a>
+    <a href="#" class="blog-card reveal d1">
+      <div class="blog-cat">Команда</div>
+      <h3 class="blog-card-h">Честная обратная связь: почему её боятся и как давать без боли</h3>
+      <div class="blog-meta">
+        <span>18 марта 2025</span>
+        <div class="blog-arrow">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </div>
+      </div>
+    </a>
+    <a href="#" class="blog-card reveal d2">
+      <div class="blog-cat">Личное</div>
+      <h3 class="blog-card-h">Как я однажды уволила весь отдел и что из этого вышло</h3>
+      <div class="blog-meta">
+        <span>10 марта 2025</span>
+        <div class="blog-arrow">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </div>
+      </div>
+    </a>
+  </div>
 </div>
 </div>
 
-<!-- ══════════════════════════════════════
-     SERVICES
-══════════════════════════════════════ -->
-<div class="section-wrap" id="services">
-<div class="section">
-    <div class="eyebrow reveal">
-        <span class="eyebrow-line"></span>
-        <span class="eyebrow-text">Услуги</span>
+<!-- SERVICES -->
+<section id="services">
+  <div class="eyebrow reveal">Услуги</div>
+  <h2 class="section-h reveal d1">Форматы работы — <em>выбирай свой</em></h2>
+
+  <div class="services-grid">
+    <div class="svc-card reveal">
+      <span class="svc-n" aria-hidden="true">01</span>
+      <h3 class="svc-h">Корпоративный тренинг</h3>
+      <p class="svc-p">Программы для команд под конкретную задачу: переговоры, управление, коммуникация. От 1 дня.</p>
+      <a href="#contact" class="svc-link">
+        Подробнее
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
     </div>
-    <h2 class="section-h reveal reveal-delay-1">Два формата <em>работы</em></h2>
-
-    <div class="services-grid">
-
-        <!-- Corporate -->
-        <div class="svc-card reveal reveal-delay-2">
-            <span class="svc-num">01</span>
-            <div class="svc-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                    <rect x="2" y="7" width="20" height="14" rx="1.5"/>
-                    <path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/>
-                </svg>
-            </div>
-            <h3>Корпоративные<br>тренинги</h3>
-            <p>Обучающие программы для команд МСБ. Практичные, заточенные под специфику вашего рынка и продукта.</p>
-            <div class="svc-rule"></div>
-            <ul class="svc-list">
-                <li>B2B-продажи и работа с корпоративными клиентами</li>
-                <li>Переговоры и управление возражениями</li>
-                <li>Выстраивание отдела продаж с нуля</li>
-                <li>Клиентский сервис и удержание клиентов</li>
-                <li>Управление командой и мотивация персонала</li>
-            </ul>
-            <a href="#contact" class="svc-link">Обсудить тренинг &nbsp;→</a>
-        </div>
-
-        <!-- Personal -->
-        <div class="svc-card reveal reveal-delay-3">
-            <span class="svc-num">02</span>
-            <div class="svc-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-                    <circle cx="12" cy="7" r="4"/>
-                </svg>
-            </div>
-            <h3>Личные<br>консультации</h3>
-            <p>Индивидуальная работа с собственниками и топ-менеджерами. Разбираем задачу, выходим с чёткими шагами.</p>
-            <div class="svc-rule"></div>
-            <ul class="svc-list">
-                <li>Аудит текущих бизнес-процессов</li>
-                <li>Стратегия роста продаж</li>
-                <li>Построение процессов в отделе продаж</li>
-                <li>Разбор точек роста и узких мест</li>
-                <li>Наставничество для руководителей</li>
-            </ul>
-            <a href="#contact" class="svc-link">Записаться &nbsp;→</a>
-        </div>
-
+    <div class="svc-card reveal d1">
+      <span class="svc-n" aria-hidden="true">02</span>
+      <h3 class="svc-h">Индивидуальный коучинг</h3>
+      <p class="svc-p">Личные сессии для руководителей и предпринимателей. Работаем с тем, что реально мешает.</p>
+      <a href="#contact" class="svc-link">
+        Подробнее
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
     </div>
-</div>
-</div>
-
-<!-- ══════════════════════════════════════
-     PROCESS
-══════════════════════════════════════ -->
-<div class="section-wrap-alt" id="process">
-<div class="section">
-    <div class="eyebrow reveal">
-        <span class="eyebrow-line"></span>
-        <span class="eyebrow-text">Как работаю</span>
+    <div class="svc-card reveal d2">
+      <span class="svc-n" aria-hidden="true">03</span>
+      <h3 class="svc-h">Стратегическая сессия</h3>
+      <p class="svc-p">Интенсивная работа с командой или лично — чтобы найти ответы на важные вопросы за один день.</p>
+      <a href="#contact" class="svc-link">
+        Подробнее
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
     </div>
-    <h2 class="section-h reveal reveal-delay-1">Понятный процесс —<br><em>измеримый результат</em></h2>
+  </div>
+</section>
 
-    <div class="process-steps">
-        <div class="p-step reveal reveal-delay-1">
-            <span class="p-step-n">01</span>
-            <h4>Диагностика</h4>
-            <p>Знакомство, анализ текущей ситуации, выявление ключевых задач и точек роста</p>
-        </div>
-        <div class="p-step reveal reveal-delay-2">
-            <span class="p-step-n">02</span>
-            <h4>Программа</h4>
-            <p>Разработка индивидуальной программы обучения или консультационного плана</p>
-        </div>
-        <div class="p-step reveal reveal-delay-3">
-            <span class="p-step-n">03</span>
-            <h4>Работа</h4>
-            <p>Тренинги или сессии с практическими заданиями и обратной связью</p>
-        </div>
-        <div class="p-step reveal reveal-delay-4">
-            <span class="p-step-n">04</span>
-            <h4>Результат</h4>
-            <p>Фиксируем изменения, передаём инструменты для самостоятельного развития</p>
-        </div>
+<!-- PROCESS -->
+<div class="process-section full-bleed" id="process">
+<div class="inner">
+  <div class="eyebrow reveal">Как работаю</div>
+  <h2 class="section-h reveal d1">Понятно, прозрачно, <em>без воды</em></h2>
+  <div class="process-steps">
+    <div class="p-step reveal d1">
+      <span class="p-step-n">01</span>
+      <h4>Диагностика</h4>
+      <p>Знакомство, разговор о ситуации. Выясняем, что реально происходит — не то, что кажется.</p>
     </div>
+    <div class="p-step reveal d2">
+      <span class="p-step-n">02</span>
+      <h4>Программа</h4>
+      <p>Составляем план под вас: формат, темп, задачи. Без лишнего — только то, что нужно.</p>
+    </div>
+    <div class="p-step reveal d3">
+      <span class="p-step-n">03</span>
+      <h4>Работа</h4>
+      <p>Сессии, практика, обратная связь. Работаем с реальными ситуациями из вашей жизни.</p>
+    </div>
+    <div class="p-step reveal d4">
+      <span class="p-step-n">04</span>
+      <h4>Результат</h4>
+      <p>Фиксируем изменения, передаём инструменты — чтобы двигаться самостоятельно.</p>
+    </div>
+  </div>
 </div>
 </div>
 
-<!-- ══════════════════════════════════════
-     CONTACT
-══════════════════════════════════════ -->
-<div class="section-wrap" id="contact">
-<div class="section">
-    <div class="contact-grid">
-
+<!-- TESTIMONIALS -->
+<section id="reviews">
+  <div class="eyebrow reveal">Отзывы</div>
+  <h2 class="section-h reveal d1">Что говорят <em>те, кто работал</em></h2>
+  <div class="testi-grid">
+    <div class="testi-card reveal d1">
+      <p class="testi-quote">
+        «После сессии с Кристиной я наконец понял, почему у меня всё время горят дедлайны. Не потому что команда плохая — а потому что я не умею ставить задачи. Это изменило всё.»
+      </p>
+      <div class="testi-author">
+        <div class="testi-av">АС</div>
         <div>
-            <div class="eyebrow reveal">
-                <span class="eyebrow-line"></span>
-                <span class="eyebrow-text">Контакты</span>
-            </div>
-            <h2 class="section-h reveal reveal-delay-1">Давайте обсудим<br><em>вашу задачу</em></h2>
-
-            <p class="contact-note reveal reveal-delay-2">
-                Первая консультация — бесплатно. Расскажите о своей ситуации,
-                и я предложу, чем смогу помочь.
-            </p>
-
-            <div class="contact-items">
-                <div class="c-item reveal reveal-delay-2">
-                    <div class="c-item-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
-                            <polyline points="22,6 12,13 2,6"/>
-                        </svg>
-                    </div>
-                    <span>email@example.com</span>
-                </div>
-                <div class="c-item reveal reveal-delay-3">
-                    <div class="c-item-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13.5 19.79 19.79 0 0 1 1.62 4.9 2 2 0 0 1 3.59 2.72h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 10.09a16 16 0 0 0 6 6l.91-.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 17.36z"/>
-                        </svg>
-                    </div>
-                    <span>+7 (___) ___-__-__</span>
-                </div>
-                <div class="c-item reveal reveal-delay-4">
-                    <div class="c-item-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-                        </svg>
-                    </div>
-                    <span>Telegram: @username</span>
-                </div>
-            </div>
+          <div class="testi-name">Алексей Соколов</div>
+          <div class="testi-role">CEO, digital-агентство</div>
         </div>
-
-        <form class="contact-form reveal reveal-delay-2" onsubmit="handleSubmit(event)">
-            <div class="form-row">
-                <div class="form-field">
-                    <label>Имя</label>
-                    <input type="text" placeholder="Иван Иванов" required>
-                </div>
-                <div class="form-field">
-                    <label>Телефон / E-mail</label>
-                    <input type="text" placeholder="+7 (999) 000-00-00" required>
-                </div>
-            </div>
-            <div class="form-field">
-                <label>Формат работы</label>
-                <select>
-                    <option value="">Выберите...</option>
-                    <option>Корпоративный тренинг</option>
-                    <option>Личная консультация</option>
-                    <option>Ещё не определился</option>
-                </select>
-            </div>
-            <div class="form-field">
-                <label>Задача (необязательно)</label>
-                <textarea placeholder="Какой вопрос хотите решить?"></textarea>
-            </div>
-            <button type="submit" class="form-submit">Отправить заявку</button>
-        </form>
-
+      </div>
     </div>
-</div>
-</div>
+    <div class="testi-card reveal d2">
+      <p class="testi-quote">
+        «Работали с командой три дня на корпоративном тренинге. Казалось, что всё это теория. Но через месяц конфликтов стало меньше, а скорость работы выросла. Не ожидала такого эффекта.»
+      </p>
+      <div class="testi-author">
+        <div class="testi-av">МВ</div>
+        <div>
+          <div class="testi-name">Мария Волкова</div>
+          <div class="testi-role">HR-директор, IT-компания</div>
+        </div>
+      </div>
+    </div>
+    <div class="testi-card reveal d1">
+      <p class="testi-quote">
+        «Кристина не даёт готовых ответов — она помогает найти свои. Это гораздо ценнее. После шести сессий я чётко понимаю, куда и зачем иду.»
+      </p>
+      <div class="testi-author">
+        <div class="testi-av">ДК</div>
+        <div>
+          <div class="testi-name">Дмитрий Козлов</div>
+          <div class="testi-role">Предприниматель</div>
+        </div>
+      </div>
+    </div>
+    <div class="testi-card reveal d2">
+      <p class="testi-quote">
+        «Говорит прямо, без лишнего. Сразу чувствуется — человек, который реально разбирается, а не просто красиво упакован.»
+      </p>
+      <div class="testi-author">
+        <div class="testi-av">ОП</div>
+        <div>
+          <div class="testi-name">Ольга Петрова</div>
+          <div class="testi-role">Руководитель отдела продаж</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
-<!-- ══════════════════════════════════════
-     FOOTER
-══════════════════════════════════════ -->
+<!-- CONTACT -->
+<section id="contact" style="background:var(--sand-2); max-width:none; padding:100px 7%;">
+<div style="max-width:var(--max); margin:0 auto;">
+  <div class="contact-grid">
+    <div class="contact-intro">
+      <div class="eyebrow reveal">Контакты</div>
+      <h2 class="section-h reveal d1">Давайте поговорим — <em>это бесплатно</em></h2>
+      <p class="reveal d2">Первая консультация без обязательств. Расскажите о своей ситуации — разберёмся, чем я могу помочь.</p>
+      <div class="c-items reveal d2">
+        <div class="c-item">
+          <div class="c-item-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          </div>
+          <span>email@example.com</span>
+        </div>
+        <div class="c-item">
+          <div class="c-item-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          </div>
+          <span>Telegram: @username</span>
+        </div>
+        <div class="c-item">
+          <div class="c-item-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13.5 19.79 19.79 0 0 1 1.62 4.9 2 2 0 0 1 3.59 2.72h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 10.09a16 16 0 0 0 6 6l.91-.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 17.36z"/></svg>
+          </div>
+          <span>+7 (___) ___-__-__</span>
+        </div>
+      </div>
+    </div>
+
+    <form class="contact-form reveal d2" onsubmit="handleSubmit(event)">
+      <div class="form-row">
+        <div class="form-field">
+          <label>Имя</label>
+          <input type="text" placeholder="Иван Иванов" required>
+        </div>
+        <div class="form-field">
+          <label>Телефон / E-mail</label>
+          <input type="text" placeholder="+7 (999) 000-00-00" required>
+        </div>
+      </div>
+      <div class="form-field">
+        <label>Формат</label>
+        <select>
+          <option value="">Выберите...</option>
+          <option>Корпоративный тренинг</option>
+          <option>Индивидуальный коучинг</option>
+          <option>Стратегическая сессия</option>
+          <option>Ещё не определился</option>
+        </select>
+      </div>
+      <div class="form-field">
+        <label>Ваш запрос (необязательно)</label>
+        <textarea placeholder="Что хотите изменить?"></textarea>
+      </div>
+      <button type="submit" class="form-submit">Отправить заявку</button>
+    </form>
+  </div>
+</div>
+</section>
+
+<!-- FOOTER -->
 <footer>
-    <span class="footer-copy">&copy; 2024 Имя Фамилия &mdash; Бизнес-тренер</span>
-    <div class="footer-links">
-        <a href="#">Telegram</a>
-        <a href="#">Instagram</a>
-        <a href="#">LinkedIn</a>
-    </div>
+  <span class="footer-logo">Кристина Черных</span>
+  <span>© 2025 — Бизнес-тренер</span>
+  <div class="footer-links">
+    <a href="#">Telegram</a>
+    <a href="#">Instagram</a>
+    <a href="#">LinkedIn</a>
+  </div>
 </footer>
 
 <script>
-    /* ── Nav shrink on scroll ── */
-    const nav = document.getElementById('nav');
-    window.addEventListener('scroll', () => {
-        nav.classList.toggle('scrolled', window.scrollY > 60);
-    }, { passive: true });
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('sc', window.scrollY > 60);
+}, {passive:true});
 
-    /* ── Scroll reveal ── */
-    const revealEls = document.querySelectorAll('.reveal');
-    const revealObserver = new IntersectionObserver(entries => {
-        entries.forEach(e => {
-            if (e.isIntersecting) {
-                e.target.classList.add('visible');
-                revealObserver.unobserve(e.target);
-            }
-        });
-    }, { threshold: 0.12 });
-    revealEls.forEach(el => revealObserver.observe(el));
+const reveals = document.querySelectorAll('.reveal');
+const ro = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('vis'); ro.unobserve(e.target); }
+  });
+}, {threshold:.1});
+reveals.forEach(el => ro.observe(el));
 
-    /* ── Active nav link ── */
-    const sections = document.querySelectorAll('[id]');
-    const navLinks = document.querySelectorAll('.nav-links a');
-    const activeObserver = new IntersectionObserver(entries => {
-        entries.forEach(e => {
-            if (e.isIntersecting) {
-                navLinks.forEach(a => {
-                    a.style.color = a.getAttribute('href') === '#' + e.target.id
-                        ? 'var(--gold)' : '';
-                });
-            }
-        });
-    }, { threshold: 0.45 });
-    sections.forEach(s => activeObserver.observe(s));
+const burger = document.getElementById('burger');
+const drawer = document.getElementById('drawer');
+burger.addEventListener('click', () => {
+  const open = drawer.classList.toggle('open');
+  burger.classList.toggle('open', open);
+  document.body.style.overflow = open ? 'hidden' : '';
+});
+drawer.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+  drawer.classList.remove('open');
+  burger.classList.remove('open');
+  document.body.style.overflow = '';
+}));
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    drawer.classList.remove('open');
+    burger.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+});
 
-    /* ── Mobile drawer ── */
-    const burger  = document.getElementById('navBurger');
-    const drawer  = document.getElementById('navDrawer');
-    const overlay = document.getElementById('navOverlay');
-
-    function openDrawer() {
-        burger.classList.add('open');
-        drawer.classList.add('open');
-        overlay.classList.add('open');
-        burger.setAttribute('aria-expanded', 'true');
-        document.body.style.overflow = 'hidden';
-    }
-
-    function closeDrawer() {
-        burger.classList.remove('open');
-        drawer.classList.remove('open');
-        overlay.classList.remove('open');
-        burger.setAttribute('aria-expanded', 'false');
-        document.body.style.overflow = '';
-    }
-
-    burger.addEventListener('click', () =>
-        drawer.classList.contains('open') ? closeDrawer() : openDrawer()
-    );
-    overlay.addEventListener('click', closeDrawer);
-
-    /* Close drawer on any drawer link tap */
-    drawer.querySelectorAll('a').forEach(a =>
-        a.addEventListener('click', closeDrawer)
-    );
-
-    /* Close drawer on Escape */
-    document.addEventListener('keydown', e => {
-        if (e.key === 'Escape') closeDrawer();
-    });
-
-    /* ── Form feedback ── */
-    function handleSubmit(e) {
-        e.preventDefault();
-        const btn = e.target.querySelector('.form-submit');
-        const orig = btn.textContent;
-        btn.textContent = 'Заявка отправлена';
-        btn.style.cssText = 'background:#2ea043;color:#fff;';
-        setTimeout(() => {
-            btn.textContent = orig;
-            btn.style.cssText = '';
-            e.target.reset();
-        }, 3000);
-    }
+function handleSubmit(e) {
+  e.preventDefault();
+  const btn = e.target.querySelector('.form-submit');
+  btn.textContent = '✓ Заявка отправлена';
+  btn.style.background = '#3a8c4e';
+  setTimeout(() => {
+    btn.textContent = 'Отправить заявку';
+    btn.style.background = '';
+    e.target.reset();
+  }, 3000);
+}
 </script>
-
 </body>
 </html>
